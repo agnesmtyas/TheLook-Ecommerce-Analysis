@@ -1,5 +1,5 @@
 # TheLook E-commerce
-![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/53c04c8c-b644-4f97-b23e-c944241560e2)
+![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/00b6ad23-f5bc-4bf7-b4ae-1a870eb0b95d)
 
 ---
 ## Table of Contents 
