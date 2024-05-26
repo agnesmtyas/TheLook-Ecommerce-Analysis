@@ -22,4 +22,4 @@ Data terdiri dari 7 tabel
 - users
 
 ## Business Questions and Answers
-- [Business-Questions-and-Answers]
+- [Business-Questions-and-Answers](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/blob/master/Business%20Questions%20and%20Answers.docx)
