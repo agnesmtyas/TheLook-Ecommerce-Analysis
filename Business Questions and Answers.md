@@ -70,7 +70,7 @@ ORDER BY Registration_Month
 Perusahaan dapat terus memanfaatkan strategi promosi pada bulan Maret untuk menarik lebih banyak pelanggan baru. Namun, perusahaan perlu mengadakan promosi yang berkelanjutan pada bulan setelahnya agar dapat meningkatkan aktivitas dan transaksi pelanggan.
 
 ### 4. Bagaimana profil pelanggan pada setiap negara? 
-'''sql
+```sql
 SELECT 
   DISTINCT Country, 
   SUM(CASE WHEN u.gender = 'M' THEN 1 else null END) AS Male,
@@ -82,6 +82,7 @@ ON u.id = oi.user_id
 WHERE oi.status = 'Complete'
 GROUP BY Country
 ORDER BY Total_Pelanggan DESC
+```
 
 ### Output
 ![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/8be17bdf-1a3d-4df8-92a3-70f46f187cb8)
