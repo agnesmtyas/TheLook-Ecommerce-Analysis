@@ -113,3 +113,146 @@ ORDER BY Total_Customers DESC
 
 ### Call to action
 Perusahaan mengoptimalkan situs web untuk mesin pencari, meningkatkan kehadiran di Facebook, dan mulai menyusun strategi pemasaran Email secara efektif untuk memaksimalkan traffic.
+
+### 6. Siapa saja pelanggan yang melakukan pembelian paling besar?
+
+```sql
+SELECT
+  DISTINCT u.id AS user_id,
+  u.first_name AS First_Name,
+  u.last_name AS Last_Name,
+  u.country AS Country,
+  ROUND(SUM(o.num_of_item * oi.sale_price),1) AS Total_Purchase
+FROM bigquery-public-data.thelook_ecommerce.users as u
+INNER JOIN bigquery-public-data.thelook_ecommerce.orders as o
+ON u.id = o.user_id
+INNER JOIN bigquery-public-data.thelook_ecommerce.order_items as oi
+ON  o.order_id = oi.order_id
+WHERE o.status = 'Complete'
+GROUP BY  user_id, First_Name, Last_Name, Country
+ORDER BY Total_Purchase DESC
+LIMIT 10
+```
+
+### Output
+![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/f76fe742-a112-4b4f-9e42-b635b13c6e72)
+
+### Insight
+* Pelanggan yang melakukan pembelian paling besar adalah Andrew Wilson yang berada di negara Poland dengan total pembayaran sebesar 4.702,3
+* Andrew Wilson memiliki total pembayaran paling besar karena melakukan pembelian produk dalam jumlah besar atau membeli barang dengan harga yang tinggi.
+
+### Call to action
+Untuk mempertahankan loyalitas pelanggan, perusahaan perlu memberikan layanan pelanggan layanan yang efisien, mempertahankan produk yang berkualitas, serta menawarkan program loyalitas. Selain itu, diskon dengan nominal yang lebih tinggi bisa dipertimbangkan untuk diberikan kepada pelanggan yang mencapai minimal pembayaran tertentu.
+
+### 7. Negara apa yang memberikan pendapatan paling besar?
+
+```sql
+SELECT
+    DISTINCT u.country as Country,
+    ROUND(SUM(oi.sale_price * o.num_of_item),1) AS Revenue
+FROM bigquery-public-data.thelook_ecommerce.users as u
+INNER JOIN bigquery-public-data.thelook_ecommerce.order_items as oi
+ON u.id = oi.user_id
+INNER JOIN bigquery-public-data.thelook_ecommerce.orders as o
+ON oi.order_id = o.order_id
+GROUP BY Country
+ORDER BY Revenue DESC
+LIMIT 10
+```
+
+### Output
+![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/7d527a8c-1259-4837-9a81-a67291fbed5b)
+
+### Insight
+* China memberikan pendapatan untuk e-commerce paling besar dengan total pendapatan sebesar 6.936.191,9, diikuti oleh United States dan Brasil.
+* Hal ini dikarenakan China memiliki populasi yang sangat besar, pertumbuhan pasar dan ekonomi yang pesat, dan infrastruktur teknologi yang canggih sehingga banyak warga China yang melakukan transaksi melalui e-commerce.
+
+### Call to action
+Perusahaan dapat meningkatkan pendapatan e-commerce dengan melakukan ekspansi global dan melakukan penguatan kemitraan sembari memantau perubahan pasar dan kebutuhan konsumen supaya negara-negara yang menghasilkan pendapatan besar dapat meningkatkan transaksinya terhadap e-commerce.
+
+### 8. Apa kategori produk yang menghasilkan pendapatan paling besar?
+
+```sql
+SELECT
+  category AS Product_Category,
+  SUM(num_of_item) AS Quantity,
+  ROUND(SUM(sale_price * num_of_item),1) AS Revenue
+FROM bigquery-public-data.thelook_ecommerce.order_items AS oi
+INNER JOIN bigquery-public-data.thelook_ecommerce.orders AS o
+ON oi.order_id = o.order_id
+INNER JOIN bigquery-public-data.thelook_ecommerce.products AS p
+ON p.id = oi.product_id
+WHERE oi.status = 'Complete'
+GROUP BY Category
+ORDER BY Revenue DESC
+LIMIT 5
+```
+
+### Output
+![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/fa7e0fba-877f-4fef-adab-cd8da9fa5e97)
+
+### Insight
+* Kategori yang memberikan pendapatan paling besar adalah Outwear & Coats, diikuti oleh Jeans, Sweaters, Suit & Sport Coats, dan Swim.
+* Kategori Outwear  & Coats kemungkinan besar terkait dengan musim tertentu, seperti musim dingin atau hujan sehingga konsumen membutuhkan penggunaan mantel atau pakaian luar.
+
+### Call to action
+Untuk mempertahankan keuntungan ini, perusahaan dapat meningkatkan stok dan strategi promosi atau diskon ketika musim hujan atau musim dingin akan/sedang berlangsung.
+
+### 9. Bagaimana kategori umur pelanggan pada kategori produk yang paling laris?
+
+```sql
+SELECT
+  CASE
+    WHEN u.age < 12 THEN 'Children'
+    WHEN u.age BETWEEN 12 AND 20 THEN 'Youth'
+    WHEN u.age BETWEEN 21 AND 30 THEN 'Young Adults'
+    WHEN u.age BETWEEN 31 AND 65 THEN 'Adults'
+    WHEN u.age > 65 THEN 'Older Adults'
+    END AS age_group,
+  COUNT(DISTINCT u.id) AS Total_Pelanggan
+FROM bigquery-public-data.thelook_ecommerce.users AS u
+INNER JOIN bigquery-public-data.thelook_ecommerce.order_items AS oi
+ON u.id = oi.user_id
+INNER JOIN bigquery-public-data.thelook_ecommerce.inventory_items AS ii
+ON ii.product_id = oi.product_id
+WHERE ii.product_category = 'Outerwear & Coats'
+GROUP BY age_group
+ORDER BY Total_Pelanggan DESC
+```
+
+### Output
+![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/810bb65a-0c66-4ad0-a50e-3304b414c31d)
+
+### Insight
+* Pada kategori produk yang paling laris, yaitu Outerwear & Coats, pelanggan terbanyak berada pada kelompok umur Adults sebanyak 5.120 pelanggan, diikuti kelompok umur Young Adults sebanyak 1.433 pelanggan.
+* Pakaian outerwear & coats menjadi populer di kalangan umur yang lebih dewasa, hal ini dikarekanakan kebutuhan yang lebih besar untuk pakaian outer atau fashion. Kalangan Young Adults lebih peka terhadap tren mode dan gaya, mereka cenderung membeli produk outerwear & coats untuk menjaga penampilan mereka di musim dingin.
+
+### Call to action
+Perusahaan dapat mengarahkan strategi pemasaran dan promosi untuk lebih tepat sasaran, seperti di kelompok umur adults dan young adults dan memenuhi kebutuhan pelanggan yang dominan.
+
+### 10.	Brand apa yang paling sering dikembalikan oleh pelanggan?
+
+```sql
+SELECT 
+  DISTINCT p.brand AS Brand,
+  COUNT(o.num_of_item) AS Total_Returned
+FROM bigquery-public-data.thelook_ecommerce.products as p
+INNER JOIN bigquery-public-data.thelook_ecommerce.order_items as oi
+ON p.id = oi.product_id
+INNER JOIN bigquery-public-data.thelook_ecommerce.orders as o
+ON oi.order_id = o.order_id
+WHERE o.status = 'Returned'
+GROUP BY Brand
+ORDER BY Total_Returned DESC
+LIMIT 5
+```
+
+### Output 
+![image](https://github.com/agnesmtyas/TheLook-Ecommerce-Analysis/assets/161667923/a5c7fadf-2fe8-41a7-9567-4ce6cc297aca)
+
+### Insight
+* Brand yang sering dikembalikan oleh pelanggan adalah brand clothing, seperti Allegra K sebanyak 615 unit, diikuti oleh Calvin Klein sebanyak 324 unit.
+* Hal ini dikarenakan pakaian yang tiba tidak sesuai dengan ukuran yang diinginkan oleh pelanggan maupun kualitas produk yang tidak sesuai dengan ekspektasi pelanggan.
+
+### Call to action
+Perusahaan dapat meninjau kembali kualitas produk yang dihasilkan serta meningkatkan detail deskripsi produk agar barang lebih sesuai dan mengurangi tingkat pengembalian produk.
